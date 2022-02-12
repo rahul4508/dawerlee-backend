@@ -2,6 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const taskRoute = require('./task.route');
+const notifyRoute = require('./notification');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -20,6 +21,11 @@ const defaultRoutes = [
     path: '/tasks',
     route: taskRoute,
   },
+  {
+  path: '/notification',
+  route: notifyRoute,
+  },
+
 ];
 
 const devRoutes = [

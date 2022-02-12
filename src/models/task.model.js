@@ -51,6 +51,17 @@ const taskSchema = mongoose.Schema(
       type:Date,
       default:Date.now()
     },
+    comments:[
+      {
+      title: String,
+      user: {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+      },
+      date:{ type:Date,
+        default:Date.now()}
+    } 
+  ],
   },
   
   {

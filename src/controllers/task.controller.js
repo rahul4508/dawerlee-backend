@@ -1,6 +1,6 @@
 
 const httpStatus = require('http-status');
-const { User,Task } = require('../models');
+const { User,Task , Notification} = require('../models');
 const ApiError = require('../utils/ApiError');
 const  base64ToFile  = require('../utils/base64ToFile');
 const catchAsync = require('../utils/catchAsync');
@@ -21,18 +21,86 @@ const createTask = catchAsync(async (req, res) => {
       else{
           console.log(result)
       }})
+      await Notification.create(
+        {
+          user:req.user.id,
+          task:task.id,
+          action:'create'
+        }
+      )
 // console.log('live==',liveUrl)
     res.status(httpStatus.CREATED).send(task);
   });
   const getTasks = catchAsync(async (req, res) => {
     console.log('heyy',Task)
-    const tasks = await Task.find();
+    const tasks = await Task.find()
+    .populate({ 
+      path: 'comments',
+      populate: {
+        path: 'user',
+        model: 'User'
+      } 
+   });
     res.send(tasks);
   });
   
+  const updateStatus = catchAsync(async (req, res) => {
+    console.log('heyy',Task)
+    let task = await Task.findById(req.params.taskId);
+   task.status=req.body.status;
+  await task.save();
+   await Notification.create(
+    {
+      user:req.user.id,
+      task:task.id,
+      action:'status',
+      statusName:req.body.status
+    }
+  )
+    res.send(task);
+  });
+  
+  const createComment = catchAsync(async (req, res) => {
+   
+   
+    let comment={
+      title:req.body.title,
+      user:req.user.id
+    }
+    // console.log('heyy',Task,req.user,comment,task.comments)
+    // let com=task.comments;
+      await Task.updateOne({_id:req.params.taskId}, { $push: {comments:comment}})
+  //  task.comments.create(comment);
+  // await task.save();
+  let task = await Task.findById(req.params.taskId) .populate({ 
+    path: 'comments',
+    populate: {
+      path: 'user',
+      model: 'User'
+    } 
+ });
+    res.send(task);
+  });
+
+
+
+
+  const getNotifications = catchAsync(async (req, res) => {
+    console.log('heyy',Task)
+    const Notifications = await Notification.find()
+    .populate("user")
+    .populate("task")
+    res.send(Notifications);
+  });
+  
+
+
 
   module.exports = {
     createTask,
-    getTasks
+    getTasks,
+    updateStatus,
+    createComment,
+    getNotifications
   };
   
