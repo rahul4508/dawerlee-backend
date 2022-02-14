@@ -20,6 +20,11 @@ router
 
   router
   .route('/comment/:taskId')
-  .patch( auth(''), taskController.createComment)
+  .patch( auth(''), taskController.createComment);
+
+  router
+  .route('/update/:taskId')
+  .patch(  auth(''), taskController.updateTask)
+  
 
   module.exports = router;

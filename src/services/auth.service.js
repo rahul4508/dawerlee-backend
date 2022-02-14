@@ -4,7 +4,8 @@ const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
-
+const { User } = require('../models');
+const bcrypt = require("bcryptjs");
 /**
  * Login with username and password
  * @param {string} email
@@ -90,10 +91,53 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
+const changePassword = async (req,res) => {
+  console.log(req.body);
+  const userId = req.user.id;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  
+  
+    if (password != confirmPassword) {
+      throw new ApiError(401,"Password and Confirm Password does not match!")
+      //  res
+      //   .status(401)
+      //   .json({ error: "Password and Confirm Password does not match!" });
+    }
+    let currentUser;
+   
+      currentUser = await User.findById({ _id: userId });
+  
+
+    if (!currentUser) {
+      throw new ApiError(401, "User not found" );
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    let newpassword = await bcrypt.hash(password, salt);
+
+     await User.findByIdAndUpdate(
+      { _id: currentUser._id },
+      {
+        $set: {
+          password: newpassword,
+         
+        },
+      }
+    );
+
+     res.status(200).json({
+      message: "Successfully Password Changed!",
+      user: currentUser,
+    });
+  
+
+};
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,
   resetPassword,
   verifyEmail,
+  changePassword
 };

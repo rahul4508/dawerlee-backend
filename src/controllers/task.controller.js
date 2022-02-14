@@ -14,6 +14,7 @@ const createTask = catchAsync(async (req, res) => {
       task.imgs.push({base:liveUrl});
      
     })
+    task.author=req.user.id;
     task.save(function(err,result){
       if (err){
           console.log(err);
@@ -28,6 +29,13 @@ const createTask = catchAsync(async (req, res) => {
           action:'create'
         }
       )
+      await Notification.create(
+        {
+          user:req.user.id,
+          task:task.id,
+          action:'follower'
+        }
+      )
 // console.log('live==',liveUrl)
     res.status(httpStatus.CREATED).send(task);
   });
@@ -40,7 +48,9 @@ const createTask = catchAsync(async (req, res) => {
         path: 'user',
         model: 'User'
       } 
-   });
+
+   })
+   .populate("follower");
     res.send(tasks);
   });
   
@@ -82,6 +92,16 @@ const createTask = catchAsync(async (req, res) => {
     res.send(task);
   });
 
+  const updateTask = catchAsync(async (req, res) => {
+    
+    let task = await Task.findById(req.params.taskId);
+    console.log('heyy',task,req.body)
+    Object.assign(task, req.body);
+    await task.save();
+  
+  
+    res.send(task);
+  });
 
 
 
@@ -101,6 +121,7 @@ const createTask = catchAsync(async (req, res) => {
     getTasks,
     updateStatus,
     createComment,
-    getNotifications
+    getNotifications,
+    updateTask
   };
   

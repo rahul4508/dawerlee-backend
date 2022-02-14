@@ -62,6 +62,21 @@ const taskSchema = mongoose.Schema(
         default:Date.now()}
     } 
   ],
+
+  author: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+  },
+
+  follower: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+  },
+  frequency: {
+    type: 'string',
+    
+  },
+  
   },
   
   {
