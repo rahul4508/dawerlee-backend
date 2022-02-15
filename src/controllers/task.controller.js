@@ -55,7 +55,7 @@ const createTask = catchAsync(async (req, res) => {
   });
   
   const updateStatus = catchAsync(async (req, res) => {
-    console.log('heyy',Task)
+    console.log('heyy stat',Task)
     let task = await Task.findById(req.params.taskId);
    task.status=req.body.status;
   await task.save();
@@ -95,7 +95,7 @@ const createTask = catchAsync(async (req, res) => {
   const updateTask = catchAsync(async (req, res) => {
     
     let task = await Task.findById(req.params.taskId);
-    console.log('heyy',task,req.body)
+    console.log('heyy ups',task,req.body)
     Object.assign(task, req.body);
     await task.save();
   

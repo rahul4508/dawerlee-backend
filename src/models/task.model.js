@@ -15,6 +15,7 @@ const taskSchema = mongoose.Schema(
     status: {
       type: String,
       required: true,
+      default: 'notInHurry',
     
     }, 
     name: { 
