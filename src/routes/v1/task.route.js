@@ -25,6 +25,9 @@ router
   router
   .route('/update/:taskId')
   .patch(  auth(''), taskController.updateTask)
-  
+  router
+  .route('/comment/:taskId/:cid')
+  .delete( auth(''), taskController.deleteComment);
 
+  
   module.exports = router;

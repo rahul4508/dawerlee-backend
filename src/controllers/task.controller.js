@@ -50,7 +50,9 @@ const createTask = catchAsync(async (req, res) => {
       } 
 
    })
-   .populate("follower");
+   .populate("follower")
+   .populate("author");
+  
 
    
     res.send(tasks);
@@ -79,8 +81,7 @@ const createTask = catchAsync(async (req, res) => {
       title:req.body.title,
       user:req.user.id
     }
-    // console.log('heyy',Task,req.user,comment,task.comments)
-    // let com=task.comments;
+  
       await Task.updateOne({_id:req.params.taskId}, { $push: {comments:comment}})
   //  task.comments.create(comment);
   // await task.save();
@@ -92,6 +93,23 @@ const createTask = catchAsync(async (req, res) => {
     } 
  });
     res.send(task);
+  });
+
+  const deleteComment = catchAsync(async (req, res) => {
+ 
+      // await Task.updateOne({_id:req.params.taskId}, { $push: {comments:comment}})
+  
+  
+  let task = await Task.findById(req.params.taskId) .populate({ 
+    path: 'comments',
+    populate: {
+      path: 'user',
+      model: 'User'
+    } 
+ });
+let l= task.comments.id(req.params.cid).remove();
+ task.save()
+    res.send(l);
   });
 
   const updateTask = catchAsync(async (req, res) => {
@@ -124,6 +142,7 @@ const createTask = catchAsync(async (req, res) => {
     updateStatus,
     createComment,
     getNotifications,
-    updateTask
+    updateTask,
+    deleteComment
   };
   
