@@ -40,7 +40,7 @@ const createTask = catchAsync(async (req, res) => {
     res.status(httpStatus.CREATED).send(task);
   });
   const getTasks = catchAsync(async (req, res) => {
-    console.log('heyy',Task)
+    console.log('heyy aa',Task)
     const tasks = await Task.find()
     .populate({ 
       path: 'comments',
@@ -51,6 +51,8 @@ const createTask = catchAsync(async (req, res) => {
 
    })
    .populate("follower");
+
+   
     res.send(tasks);
   });
   

@@ -77,7 +77,17 @@ const taskSchema = mongoose.Schema(
     type: 'string',
     
   },
-  
+  week:{
+    type: 'string',
+  }
+  ,
+  month:{
+    type: 'string',
+  },
+  isScheduled: {
+    type: Boolean,
+    default: false,
+  },
   },
   
   {
