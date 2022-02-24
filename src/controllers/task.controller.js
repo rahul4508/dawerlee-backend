@@ -92,6 +92,15 @@ const createTask = catchAsync(async (req, res) => {
       model: 'User'
     } 
  });
+
+ await Notification.create(
+  {
+    user:req.user.id,
+    task:task.id,
+    action:'comment',
+   
+  }
+)
     res.send(task);
   });
 
@@ -130,6 +139,7 @@ let l= task.comments.id(req.params.cid).remove();
     const Notifications = await Notification.find()
     .populate("user")
     .populate("task")
+    .sort({_id:-1})
     res.send(Notifications);
   });
   
