@@ -5,6 +5,7 @@ const taskRoute = require('./task.route');
 const notifyRoute = require('./notification');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
+const taskType = require('./taskType.route')
 
 const router = express.Router();
 
@@ -25,6 +26,10 @@ const defaultRoutes = [
   path: '/notification',
   route: notifyRoute,
   },
+  {
+    path: '/task-type',
+    route: taskType,
+    },
 
 ];
 
