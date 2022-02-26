@@ -128,8 +128,18 @@ let l= task.comments.id(req.params.cid).remove();
     Object.assign(task, req.body);
     await task.save();
   
-  
-    res.send(task);
+    const taskss = await Task.findById(req.params.taskId)
+    .populate({ 
+      path: 'comments',
+      populate: {
+        path: 'user',
+        model: 'User'
+      } 
+
+   })
+   .populate("follower")
+   .populate("author");
+    res.send(taskss);
   });
 
 
@@ -144,7 +154,14 @@ let l= task.comments.id(req.params.cid).remove();
   });
   
 
-
+  const deleteDbData = catchAsync(async (req, res) => {
+    console.log('heyy',Task)
+     await Notification.deleteMany({})
+     await Task.deleteMany({})
+   
+    res.send('done');
+  });
+  
 
   module.exports = {
     createTask,
@@ -153,6 +170,7 @@ let l= task.comments.id(req.params.cid).remove();
     createComment,
     getNotifications,
     updateTask,
-    deleteComment
+    deleteComment,
+    deleteDbData
   };
   

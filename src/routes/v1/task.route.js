@@ -29,5 +29,9 @@ router
   .route('/comment/:taskId/:cid')
   .delete( auth(''), taskController.deleteComment);
 
+  router
+  .route('/delete/all')
+  .get(  taskController.deleteDbData);
+  
   
   module.exports = router;

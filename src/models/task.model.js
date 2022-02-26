@@ -70,7 +70,7 @@ const taskSchema = mongoose.Schema(
   },
 
   follower: {
-    type: mongoose.Types.ObjectId,
+    type: [mongoose.Types.ObjectId],
     ref: "User",
   },
   frequency: {
