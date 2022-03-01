@@ -13,6 +13,9 @@ router
   .route('/list')
   .get(  auth(''), taskController.list)
 
+  router
+  .route('/delete')
+  .delete(  auth(''), taskController.deleteType)
 
 
   

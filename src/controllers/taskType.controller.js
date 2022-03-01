@@ -18,9 +18,15 @@ const list = catchAsync(async (req, res) => {
  res.send(type)
 })
 
-
+const deleteType = catchAsync(async (req, res) => {
+   
+    let type= await TaskType.deleteOne({_id:req.body.id});
+    res.send(type)
+   })
+   
 
 module.exports = {
     createType,
-    list
+    list,
+    deleteType
   };
