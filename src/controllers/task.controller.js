@@ -73,6 +73,19 @@ const createTask = catchAsync(async (req, res) => {
   )
     res.send(task);
   });
+
+  const updateImg= catchAsync(async (req, res) => {
+    const task = await Task.findById(req.params.taskId);
+    let imgs=req.body.imgs;
+    imgs && imgs.map( async i=>{
+      let liveUrl=  await base64ToFile(i.base,task.id,"task");
+      task.imgs={base:liveUrl};
+      // task.imgs.push({base:liveUrl});
+    })
+    task.save();
+
+    res.send(task)
+  })
   
   const createComment = catchAsync(async (req, res) => {
    
@@ -171,6 +184,7 @@ let l= task.comments.id(req.params.cid).remove();
     getNotifications,
     updateTask,
     deleteComment,
-    deleteDbData
+    deleteDbData,
+    updateImg
   };
   

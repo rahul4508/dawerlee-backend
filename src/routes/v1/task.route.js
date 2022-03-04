@@ -33,5 +33,9 @@ router
   .route('/delete/all')
   .get(  taskController.deleteDbData);
   
+
+  router
+  .route('/update-img/:taskId')
+  .patch(  auth(''), taskController.updateImg)
   
   module.exports = router;
