@@ -40,7 +40,7 @@ const createTask = catchAsync(async (req, res) => {
     res.status(httpStatus.CREATED).send(task);
   });
   const getTasks = catchAsync(async (req, res) => {
-    console.log('heyy aa',Task)
+    
     const tasks = await Task.find()
     .populate({ 
       path: 'comments',
@@ -59,7 +59,7 @@ const createTask = catchAsync(async (req, res) => {
   });
   
   const updateStatus = catchAsync(async (req, res) => {
-    console.log('heyy stat',Task)
+   
     let task = await Task.findById(req.params.taskId);
    task.status=req.body.status;
   await task.save();
@@ -88,11 +88,16 @@ const createTask = catchAsync(async (req, res) => {
   })
   
   const createComment = catchAsync(async (req, res) => {
-   
+    let base=''
+  
+    if(req.body.img){
+     base = await base64ToFile(req.body.img,req.user.id,"comment");
+   }
    
     let comment={
       title:req.body.title,
-      user:req.user.id
+      user:req.user.id,
+      img:req.body.img?base:''
     }
   
       await Task.updateOne({_id:req.params.taskId}, { $push: {comments:comment}})
@@ -137,7 +142,7 @@ let l= task.comments.id(req.params.cid).remove();
   const updateTask = catchAsync(async (req, res) => {
     
     let task = await Task.findById(req.params.taskId);
-    console.log('heyy ups',task,req.body)
+    
     Object.assign(task, req.body);
     await task.save();
   
@@ -158,7 +163,7 @@ let l= task.comments.id(req.params.cid).remove();
 
 
   const getNotifications = catchAsync(async (req, res) => {
-    console.log('heyy',Task)
+  
     const Notifications = await Notification.find()
     .populate("user")
     .populate("task")

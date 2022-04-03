@@ -55,6 +55,7 @@ const taskSchema = mongoose.Schema(
     comments:[
       {
       title: String,
+      img:String,
       user: {
         type: mongoose.Types.ObjectId,
         ref: "User",
