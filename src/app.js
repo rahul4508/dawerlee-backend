@@ -5,12 +5,14 @@ const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors');
 const passport = require('passport');
+const https= require("https");
 const httpStatus = require('http-status');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
+const fs = require("fs-extra");
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 // require('./cron')
@@ -63,5 +65,10 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+const options = {
+  key: fs.readFileSync("/var/www/html/dawerlee-task/dawerleetask-frontend/ssl/private.key"),
+  cert: fs.readFileSync("/var/www/html/dawerlee-task/dawerleetask-frontend/ssl/4b73aef0660e5361.pem")}
+
+https.createServer(options, app)
 
 module.exports = app;
